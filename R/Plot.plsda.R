@@ -1,17 +1,17 @@
 Plot.plsda <-
 function (pcx, pcy, scaling) {
-pwd.score = paste(getwd(), "/PLS-DA/PLSDA_Scores_", scaling, ".out", sep="")
+pwd.score = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_Scores_", scaling, ".out", sep="")
 score = read.csv(pwd.score, header=TRUE)
 score.x = score[,-1]
 rownames(score.x) = score[,1]
-pwd.load = paste(getwd(), "/PLS-DA/PLSDA_Loadings_", scaling, ".out", sep="")
+pwd.load = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_Loadings_", scaling, ".out", sep="")
 loading = read.csv(pwd.load, header=TRUE)
 loading.x = loading[,-1]
 rownames(loading.x) = loading[,1]
-pwd.p = paste(getwd(), "/PLS-DA/PLSDA_P_", scaling, ".out", sep="")
+pwd.p = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_P_", scaling, ".out", sep="")
 p = read.csv(pwd.p, header=TRUE)
 p.x = matrix(p[,-1], ncol=1)
-pwd.ptot = paste(getwd(), "/PLS-DA/PLSDA_Ptot_", scaling, ".out", sep="")
+pwd.ptot = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_Ptot_", scaling, ".out", sep="")
 p = read.csv(pwd.ptot, header=TRUE)
 pvar.a = p.x[pcx,]/p
 pvar.b = p.x[pcy,]/p
@@ -38,7 +38,7 @@ axis(1, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
 axis(2, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
 library(car)
 dataEllipse(score.x[,pcx], score.x[,pcy], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
-dirout = paste(getwd(), "/PLS-DA/", sep="")
+dirout = paste(getwd(), "/PLS-DA_", scaling, "/", sep="")
 scor = paste(dirout, "ScorePlot_PLS-DA_", scaling, ".pdf", sep="")
 dev.copy2pdf(file=scor)
 Max.pc1 = 1.1*(max(loading.x[,pcx]))

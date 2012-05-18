@@ -1,1 +1,2 @@
 exportPattern("^[[:alpha:]]+")
+import(car, pdist, pls, gplots, mvtnorm, robustbase, gtools, bitops, caTools, pcaPP, rrcov)

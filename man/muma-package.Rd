@@ -12,7 +12,7 @@ Preprocessing of metabolomic data (normalization and scalings); Principal Compon
 \tabular{ll}{
 Package: \tab muma\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
+Version: \tab 1.2\cr
 Date: \tab 2012-04-13\cr
 License: \tab GPL-2\cr
 }
