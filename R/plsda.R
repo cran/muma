@@ -1,6 +1,6 @@
 plsda <-
 function (scaling) {
-pwd.x = paste(getwd(), "/Preprocessing_Data_", scaling, "/ScaledTable_", scaling, ".csv", sep="")
+pwd.x = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
 x = read.csv(pwd.x, header=TRUE)
  x.x = x[,2:ncol(x)]
  rownames(x.x) = x[,1]
@@ -31,7 +31,7 @@ sorted.un = matrix(unlist(sorted.x), ncol=ncol(sorted.x))
 P = plsr(B ~ sorted.un, ncomp = nrow(g)-1, method = c("kernelpls"), validation = "CV")
 rownames(P$scores) =  rownames(sorted.x)
 rownames(P$loadings) =  colnames(sorted.x)
-dirout = paste(getwd(), "/PLS-DA/", sep="")
+dirout = paste(getwd(), "/PLS-DA_", scaling, "/", sep="")
 dir.create(dirout)
 out.score = paste(dirout, "PLSDA_Scores_", scaling, ".out", sep="")
 write.csv(P$scores, out.score)

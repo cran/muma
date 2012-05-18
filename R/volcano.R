@@ -1,23 +1,12 @@
 volcano <-
-function(file, plot.vol, norm) {
-comp = read.csv(file, sep=",", header=TRUE)
-     comp.x = comp[,3:ncol(comp)]
-     comp.x = cbind(comp[,2], comp[,1], comp.x)
-     x <- comp.x
+function(file, plot.vol) {
+ pwdfile=paste(getwd(), "/Univariate/DataTable.csv", sep="")
+ file=pwdfile
+ x <- read.csv(file, sep=",", header=TRUE)
  x.x = x[,3:ncol(x)]
  rownames(x.x) = x[,2]
  k = matrix(x[,1], ncol=1)
-  if (norm) {
- x.t <- t(x.x)
- x.s <- matrix(colSums(x.t), nrow=1)
- uni = matrix(rep(1,nrow(x.t)), ncol=1)
- area.uni<-uni%*%x.s
- x.areanorm<-x.t/area.uni
- x.areanorm = t(x.areanorm)
- x.n = cbind(k, x.areanorm)
-  } else {
-   x.n = cbind(k, x.x)
-    }
+ x.n = cbind(k, x.x)
  sorted = x.n[order(x.n[,1]),]
  sorted.x = as.matrix(sorted[,-1], ncol=ncol(sorted)-1)
  g = c()
@@ -78,9 +67,17 @@ colpv=matrix(rep(NA, nrow(PV)), ncol=1)
   }
 max.fc = 1.3*(max(abs(logfc)))
 V = paste(dirout.vol, "VolcanoPlot_", i, "vs", j, ".pdf", sep="")
+pospv=matrix(rep(NA, nrow(PV)), ncol=1)
+    for (p in 1:nrow(PV)) {
+        if (logfc[p,] < 0) {
+            pospv[p,] = 2
+        } else { 
+        pospv[p,] = 4
+    }
+   }
 pdf(V)
 plot(logfc, logpv, col=colpv, pch = 19, xlim=c(-max.fc,max.fc), xlab = "Log2 (Fold Change)", ylab = "Log10 (Pvalue)", main = paste("Volcano Plot ", i, " vs ", j, sep=""), sub = "(Variables in Blue are significant (Pvalue<0.05) and showed Fold Changes >1.2 or <0.8)")
-text(logfc, logpv, labels=colnames(sorted.x), cex=0.8, pos=1, col=colpv)
+text(logfc, logpv, labels=colnames(sorted.x), cex=0.8, pos=pospv, col=colpv)
 axis(2, at = c(-1,150), pos=c(-0.3219281,0), col="blue", lwd=0.3)
 axis(2, at = c(-1,150), pos=c(0.2630344,0), col="blue", lwd=0.3)
 axis(1, at = c(-150,150), pos=c(1.30103,0), col="blue", lwd=0.3)
@@ -88,7 +85,7 @@ dev.off()
 if (plot.vol) {
 	dev.new()
 plot(logfc, logpv, col=colpv, pch = 19, xlim=c(-max.fc,max.fc), xlab = "Log2 (Fold Change)", ylab = "Log10 (Pvalue)", main = paste("Volcano Plot ", i, " vs ", j, sep=""), sub = "(Variables in Blue are significant (Pvalue<0.05) and showed Fold Changes >1.2 or <0.8)")
-text(logfc, logpv, labels=colnames(sorted.x), cex=0.8, pos=1, col=colpv)
+text(logfc, logpv, labels=colnames(sorted.x), cex=0.8, pos=pospv, col=colpv)
 axis(2, at = c(-1,150), pos=c(-0.3219281,0), col="blue", lwd=0.3)
 axis(2, at = c(-1,150), pos=c(0.2630344,0), col="blue", lwd=0.3)
 axis(1, at = c(-150,150), pos=c(1.30103,0), col="blue", lwd=0.3)

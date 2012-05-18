@@ -37,7 +37,7 @@ text(score.x[,pcx], score.x[,pcy], col=col, cex=0.5, labels=rownames(score.x), p
 axis(1, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
 axis(2, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
 library(car)
-data.ellipse(score.x[,pcx], score.x[,pcy], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
+dataEllipse(score.x[,pcx], score.x[,pcy], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
 dirout = paste(getwd(), "/PLS-DA/", sep="")
 scor = paste(dirout, "ScorePlot_PLS-DA_", scaling, ".pdf", sep="")
 dev.copy2pdf(file=scor)

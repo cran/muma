@@ -1,5 +1,5 @@
-\name{metaBc}
-\alias{metaBc}
+\name{MetaBc}
+\alias{MetaBc}
 \docType{data}
 \title{
 Metabolomics data of B cells
@@ -7,7 +7,7 @@ Metabolomics data of B cells
 \description{
 Data from metabolomics analysis of B cells harvested in different conditions and at different time points
 }
-\usage{data(metaBc)}
+\usage{data(MetaBc)}
 \format{
   A data frame with 25 observations on the following 100 variables.
   \describe{

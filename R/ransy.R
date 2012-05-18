@@ -1,10 +1,10 @@
 ransy <-
 function(scaling, driver.peak) {
-  pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/NormalizedTable.csv", sep="")
+  pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
   x <- read.csv(pwd.n, sep=",", header=TRUE)
   x.x <- x[,2:ncol(x)]
   rownames(x.x) <- x[,1]
-  x.t <- t(x.x)
+  x.t <- x.x
   one = matrix(rep(1, ncol(x.t)), nrow=1)
   driver = x.t[,driver.peak]%*%one
   D = x.t/driver
@@ -16,9 +16,9 @@ function(scaling, driver.peak) {
   Rt = t(R)
   library(gplots)
   plot(Rt, type="h", main = paste("RANSY (", rownames(x.x)[driver.peak], ")", sep=""), ylab = paste("Mean/sd of ratio with ", rownames(x.x)[driver.peak], sep=""), xlab = "Variables")
-  text(Rt, labels=rownames(x.x), cex=0.6)
+  text(Rt, labels=colnames(x.x), cex=0.6)
   dirout = paste(getwd(), "/RANSY/", sep="")
   dir.create(dirout)
-  out = paste(dirout, "ransy_", rownames(x.x)[driver.peak], ".pdf", sep="")
+  out = paste(dirout, "ransy_", colnames(x.x)[driver.peak], ".pdf", sep="")
   dev.copy2pdf(file=out)
 }

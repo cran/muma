@@ -1,6 +1,6 @@
 oplsda <-
 function(scaling) {
-  	pwd.x = paste(getwd(), "/Preprocessing_Data_", scaling, "/ScaledTable_", scaling, ".csv", sep="")
+  	pwd.x = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable", scaling, ".csv", sep="")
 	x = read.csv(pwd.x, header=TRUE)
  	x.x = x[,2:ncol(x)]
  	rownames(x.x) = x[,1]
@@ -72,6 +72,7 @@ for (j in 1:nf) {
   Cortho=matrix(c(Cortho,cortho))
 }
 T = matrix(T, ncol=nf)
+T = scale(T, scale=FALSE, center=TRUE)
 P = matrix(P, ncol=nf)
 C = matrix(C, ncol=nf)
 W = matrix(W, ncol=nf)
@@ -94,7 +95,7 @@ text(T[,nf], Tortho[,1], col=col, labels=rownames(sorted), cex=0.5, pos=1)
 axis(1, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
 axis(2, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
 library(car)
-data.ellipse(T[,nf], Tortho[,1], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
+dataEllipse(T[,nf], Tortho[,1], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
 dirout = paste(getwd(), "/OPLS-DA/", sep="")
 dir.create(dirout)
 pwdxdef = paste(dirout, "X_deflated.csv", sep="")
@@ -145,7 +146,7 @@ pc.all <- prcomp(X, center=FALSE, scale=FALSE)
  axis(1, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
  axis(2, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
  library(car)
- data.ellipse(pc.all$x[,1], pc.all$x[,2], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
+ dataEllipse(pc.all$x[,1], pc.all$x[,2], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
  text(pc.all$x[,1], pc.all$x[,2], col=col, cex=0.5, labels=rownames(sorted), pos=1)
  dev.off()
  pca.load <- paste("Loading PC1 (",p.f[1,1],") %")

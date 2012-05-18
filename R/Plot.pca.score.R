@@ -29,7 +29,7 @@ function(pcx,pcy,scaling) {
  axis(1, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
  axis(2, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
  library(car)
- data.ellipse(Score.x[,pcx], Score.x[,pcy], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
+ dataEllipse(Score.x[,pcx], Score.x[,pcy], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
  text(Score.x[,pcx], Score.x[,pcy], col=col, cex=0.5, labels=rownames(Score.x), pos=1)
  D <- paste(getwd(), "/PCA_Data_", scaling, "/ScorePlot_PC",pcx,"vsPC",pcy,".pdf", sep="")
  dev.copy2pdf(file=D)

@@ -23,7 +23,7 @@ function(threshold=TRUE, pos.threshold, neg.threshold) {
     image(mycor, axes=FALSE, zlim=c(-1,neg.threshold), col="navy", add=TRUE)
     axis(side=1, labels=colnames(mycor), at=seq(0,1,length=length(colnames(mycor))), las=2, cex.axis=0.4)
     axis(side=2, labels=colnames(mycor), at=seq(0,1,length=length(colnames(mycor))), las=2, cex.axis=0.4)
-    out = paste(dirout, "STOCSY_", pos.threshold, "_", neg.threshold, ".pdf", sep="")
+    out = paste(dirout, "OSTOCSY_", pos.threshold, "_", neg.threshold, ".pdf", sep="")
     dev.copy2pdf(file=out)
   }
 }

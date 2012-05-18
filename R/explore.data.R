@@ -1,16 +1,65 @@
 explore.data <-
-function(file,scaling) {
+function(file, scaling, scal=TRUE, normalize=TRUE, imputation=FALSE, imput) {
      comp = read.csv(file, sep=",", header=TRUE)
      comp.x = comp[,3:ncol(comp)]
      comp.x = cbind(comp[,2], comp[,1], comp.x)
      x <- comp.x
      x.x <- x[,3:ncol(x)]
      rownames(x.x) <- x[,2]
+     if (!scal) {
+      scaling=""
+     }
+     dirout = paste(getwd(), "/Preprocessing_Data_", scaling, "/", sep="")
+     dir.create(dirout)
+      #Imputation
+     if (imputation) { 
+     y = x.x
+r = is.na(y)
+for (k in 1:ncol(r)) {
+  vec = matrix(r[,k], ncol=1)
+  who.miss.rows = which(apply(vec, 1, function(i) { any(i) }))
+  if (length(who.miss.rows) > nrow(y)*0.8) {
+    warning(paste("The variable -", colnames(y)[k], "- has a number of missing values > 80%, therefore has been eliminated", sep=" "))
+    y = y[,-k]
+  }
+}
+r = is.na(y)
+who.miss.columns = c()
+for (i in 1:nrow(y)) {
+  for (j in 1:ncol(y)) {
+    if (r[i,j] == TRUE) {
+      if (imput == "mean") {
+	 v2 = matrix(r[,j], ncol=1)
+	 who.miss.rows = which(apply(v2, 1, function(i) { any(i) }))
+	 y[i,j] = mean(y[-who.miss.rows,j])
+	 print(paste("Imputing missing value of variable -", colnames(y)[j], "- for the observation -", rownames(y)[i], "- with", imput, "value", sep=" "))
+      } else if (imput == "minimum") {
+	v2 = matrix(r[,j], ncol=1)
+	who.miss.rows = which(apply(v2, 1, function(i) { any(i) }))
+	y[i,j] = min(y[-who.miss.rows,j])
+	print(paste("Imputing missing value of variable -", colnames(y)[j], "- for the observation -", rownames(y)[i], "- with", imput, "value", sep=" "))
+      } else if (imput == "half.minimum") {
+	v2 = matrix(r[,j], ncol=1)
+	who.miss.rows = which(apply(v2, 1, function(i) { any(i) }))
+	y[i,j] = min(y[-who.miss.rows,j])/2
+	print(paste("Imputing missing value of variable -", colnames(y)[j], "- for the observation -", rownames(y)[i], "- with", imput, "value", sep=" "))
+      } else if (imput == "zero") {
+	v2 = matrix(r[,j], ncol=1)
+	who.miss.rows = which(apply(v2, 1, function(i) { any(i) }))
+	y[i,j] = 0
+	print(paste("Imputing missing value of variable -", colnames(y)[j], "- for the observation -", rownames(y)[i], "- with", imput, "value", sep=" "))
+      }
+    }
+  }
+}
+pwdi = paste(getwd(), "/Preprocessing_Data_", scaling, "/ImputedMatrix.csv", sep="")
+write.csv(y, pwdi)
+x.x=y
+}
+     #Negative Values
      z <- matrix(NA,nrow(x.x),ncol(x.x))
      colnames(z) <- colnames(x.x)
      rownames(z) <- rownames(x.x)
-     dirout = paste(getwd(), "/Preprocessing_Data_", scaling, "/", sep="")
-     dir.create(dirout)
      negative = c()
      N = paste(getwd(), "/Preprocessing_Data_", scaling, "/NegativeValues.out", sep="")
      write.csv(negative, N)
@@ -39,75 +88,99 @@ function(file,scaling) {
      colnames(z.x)=colnames(z)[apply(z,2,function(c) sum(c)>0)]
      write.csv(z.x,paste(dirout, "CorrectedTable.csv", sep=""))
      pwd.c = paste(getwd(), "/Preprocessing_Data_", scaling, "/CorrectedTable.csv", sep="")
+     #Normalization
      x <- read.csv(pwd.c, sep=",", header=TRUE)
      x.x <- x[,2:ncol(x)]
      rownames(x.x) <- x[,1]
+     if (normalize) {
      x.t <- t(x.x)
      x.s <- matrix(colSums(x.t), nrow=1)
      uni = matrix(rep(1,nrow(x.t)), ncol=1)
      area.uni<-uni%*%x.s
      x.areanorm<-x.t/area.uni
-     write.csv(x.areanorm,paste(dirout, "NormalizedTable.csv", sep=""))
-     if (scaling == "Pareto" | scaling == "pareto" | scaling == "P" | scaling == "p") {
-      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/NormalizedTable.csv", sep="")
+     x.areanorm=t(x.areanorm)
+     write.csv(x.areanorm,paste(dirout, "/ProcessedTable.csv", sep=""))
+     } else {
+	write.csv(x.x,paste(dirout, "/ProcessedTable.csv", sep=""))
+	}
+      #Scaling
+      if (scal) {
+      if (scaling == "Pareto" | scaling == "pareto" | scaling == "P" | scaling == "p") {
+      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
       x <- read.csv(pwd.n, sep=",", header=TRUE)
       x.x <- x[,2:ncol(x)]
       rownames(x.x) <- x[,1]
-      x.t <- t(x.x)
-      x.areanorm.tc<-scale(x.t, center=TRUE, scale=FALSE)
+      x.areanorm.tc<-scale(x.x, center=TRUE, scale=FALSE)
       all.sd<-matrix(apply(x.areanorm.tc, 2, sd), nrow=1)
       uni.exp.all = matrix(rep(1,nrow(x.areanorm.tc)), ncol=1)
       all.sdm = uni.exp.all%*%all.sd
       all.sqsd = sqrt(all.sdm)
       all.pareto<-x.areanorm.tc/all.sqsd
-      write.csv(all.pareto,paste(dirout, "ScaledTable_", scaling, ".csv", sep=""))
+      write.csv(all.pareto,paste(dirout, "/ProcessedTable.csv", sep=""))
      } else if (scaling == "Auto" | scaling == "auto" | scaling == "A" | scaling == "a") {
-      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/NormalizedTable.csv", sep="")
+      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
       x <- read.csv(pwd.n, sep=",", header=TRUE)
       x.x <- x[,2:ncol(x)]
       rownames(x.x) <- x[,1]
-      x.t <- t(x.x)
-      x.areanorm.tc<-scale(x.t, center=TRUE, scale=FALSE)
+      x.areanorm.tc<-scale(x.x, center=TRUE, scale=FALSE)
       all.sd<-matrix(apply(x.areanorm.tc, 2, sd), nrow=1)
       uni.exp.all = matrix(rep(1,nrow(x.areanorm.tc)), ncol=1)
       all.sdm = uni.exp.all%*%all.sd
       all.auto<-x.areanorm.tc/all.sdm
-      write.csv(all.auto,paste(dirout, "ScaledTable_", scaling, ".csv", sep=""))
+      write.csv(all.auto,paste(dirout, "/ProcessedTable.csv", sep=""))
      } else if (scaling == "Vast" | scaling == "vast" | scaling == "V" | scaling == "v") {
-      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/NormalizedTable.csv", sep="")
+      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
       x <- read.csv(pwd.n, sep=",", header=TRUE)
       x.x <- x[,2:ncol(x)]
       rownames(x.x) <- x[,1]
-      x.t <- t(x.x)
-      x.areanorm.tc<-scale(x.t, center=TRUE, scale=FALSE)
+      x.areanorm.tc<-scale(x.x, center=TRUE, scale=FALSE)
       all.sd<-matrix(apply(x.areanorm.tc, 2, sd), nrow=1)
       uni.exp.all = matrix(rep(1,nrow(x.areanorm.tc)), ncol=1)
       all.sdm = uni.exp.all%*%all.sd
       sdm2 = all.sdm^2
-      colm = matrix(colMeans(x.t), nrow=1)
+      colm = matrix(colMeans(x.x), nrow=1)
       colm.m = uni.exp.all%*%colm
       num = x.areanorm.tc * colm.m
       vast = num/sdm2
-      write.csv(vast,paste(dirout, "ScaledTable_", scaling, ".csv", sep=""))
+      write.csv(vast,paste(dirout, "/ProcessedTable.csv", sep=""))
      } else if (scaling == "Range" | scaling == "range" | scaling == "R" | scaling == "r") {
-      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/NormalizedTable.csv", sep="")
+      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
       x <- read.csv(pwd.n, sep=",", header=TRUE)
       x.x <- x[,2:ncol(x)]
       rownames(x.x) <- x[,1]
-      x.t <- t(x.x)
-      x.areanorm.tc<-scale(x.t, center=TRUE, scale=FALSE)
+      x.areanorm.tc<-scale(x.x, center=TRUE, scale=FALSE)
       range = c()
-      for (i in 1:ncol(x.t)) {
+      for (i in 1:ncol(x.x)) {
       den = c()
-      den = max(x.t[,i]) - min(x.t[,i])
+      den = max(x.x[,i]) - min(x.x[,i])
       range = matrix(c(range, den), nrow=1)
       }
       uni.exp.all = matrix(rep(1,nrow(x.areanorm.tc)), ncol=1)
       range.m = uni.exp.all%*%range
       all.range = x.areanorm.tc/range.m
-      write.csv(all.range,paste(dirout, "ScaledTable_", scaling, ".csv", sep=""))
+      write.csv(all.range,paste(dirout, "/ProcessedTable.csv", sep=""))
+     } else if (scaling == "Median" | scaling == "median" | scaling == "M" | scaling == "m") {
+      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
+      x <- read.csv(pwd.n, sep=",", header=TRUE)
+      x.x <- x[,2:ncol(x)]
+      rownames(x.x) <- x[,1]
+      x.areanorm.tc<-scale(x.x, center=TRUE, scale=FALSE)
+      all.med<-matrix(apply(x.areanorm.tc, 2, median), nrow=1)
+      uni.exp.all = matrix(rep(1,nrow(x.areanorm.tc)), ncol=1)
+      all.sdm = uni.exp.all%*%all.med
+      all.med<-x.areanorm.tc/all.sdm
+      write.csv(all.med,paste(dirout, "/ProcessedTable.csv", sep=""))
      }
-     pwd.scal = paste(getwd(), "/Preprocessing_Data_", scaling, "/ScaledTable_", scaling, ".csv", sep="")
+    } else {
+      pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
+      x <- read.csv(pwd.n, sep=",", header=TRUE)
+      x.x <- x[,2:ncol(x)]
+      rownames(x.x) <- x[,1]
+      x.c = scale(x.x, scale=FALSE)
+      write.csv(x.c,paste(dirout, "/ProcessedTable.csv", sep=""))
+      }
+     pwd.scal = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
+     #PCA
      x <- read.csv(pwd.scal, sep=",", header=TRUE)
      x.x <- x[,2:ncol(x)]
      rownames(x.x) <- x[,1]
@@ -233,16 +306,17 @@ function(file,scaling) {
 	allFpwd = paste(getwd(),"/PCA_Data_", scaling, "/PCs_Fstatistic.out", sep="")
 	write.csv(all.F, allFpwd, row.names=FALSE)
 	sum = matrix(rowSums(all.F), ncol=1)
-	all = cbind(nam, sum, varp)
+	all = data.frame(nam, sum, varp)
 	colnames(all)[3]="Variance(%)"
 	colnames(all)[2]="Sum_p_values"
 	colnames(all)[1]="Pair_of_PCs"
-	ord.sum = matrix(all[order(all[,2]),], ncol=3)
+	ord.sum = all[order(all[,2]),]
 	colnames(ord.sum)[3]="Variance(%)"
 	colnames(ord.sum)[2]="Sum_p_values(F_statistics)"
 	colnames(ord.sum)[1]="Pair_of_PCs"
+	rownames(ord.sum)=1:nrow(ord.sum)
 	rankFpwd = paste(getwd(),"/PCA_Data_", scaling, "/PCs_ranked_Fpvalue.out", sep="")
 	write.csv(ord.sum, rankFpwd, row.names=FALSE)
 	print("Pairs of Principal Components giving highest statistical cluster separation are:")
-	print(ord.sum[1:3,])
+	print(ord.sum[1:5,])
 }

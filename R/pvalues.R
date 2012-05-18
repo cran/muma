@@ -1,23 +1,12 @@
 pvalues <-
-function(file, mtc, norm) {
- comp = read.csv(file, sep=",", header=TRUE)
-     comp.x = comp[,3:ncol(comp)]
-     comp.x = cbind(comp[,2], comp[,1], comp.x)
-     x <- comp.x
+function(file, mtc) {
+ pwdfile=paste(getwd(), "/Univariate/DataTable.csv", sep="")
+ file=pwdfile
+ x <- read.csv(file, sep=",", header=TRUE)
  x.x = x[,3:ncol(x)]
  rownames(x.x) = x[,2]
  k = matrix(x[,1], ncol=1)
-  if (norm) {
- x.t <- t(x.x)
- x.s <- matrix(colSums(x.t), nrow=1)
- uni = matrix(rep(1,nrow(x.t)), ncol=1)
- area.uni<-uni%*%x.s
- x.areanorm<-x.t/area.uni
- x.areanorm = t(x.areanorm)
- x.n = cbind(k, x.areanorm)
-  } else {
-   x.n = cbind(k, x.x)
-    }
+ x.n = cbind(k, x.x)
  sorted = x.n[order(x.n[,1]),]
  sorted.x = sorted[,-1]
  g = c()

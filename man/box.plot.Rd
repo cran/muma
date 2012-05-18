@@ -7,14 +7,12 @@ Generate box plots
 Generates box plots of each variable (column) present in the matrix provided and according to the class specification provided
 }
 \usage{
-box.plot(file, norm)
+box.plot(file)
 }
+%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{file}{
 a connection or a character string giving the name of the file containing information to plot
-}
-  \item{norm}{
-logical, whether normalize or not each column on total sum. Default is 'TRUE'.
 }
 }
 \details{
@@ -33,16 +31,15 @@ univariate
 \examples{
 
 ## The function is currently defined as
-function (file, norm) 
+function (file) 
 {
-    comp = read.csv(file, sep = ",", header = TRUE)
-    comp.x = comp[, 3:ncol(comp)]
-    comp.x = cbind(comp[, 2], comp[, 1], comp.x)
-    x <- comp.x
+    pwdfile = paste(getwd(), "/Univariate/DataTable.csv", sep = "")
+    file = pwdfile
+    x <- read.csv(file, sep = ",", header = TRUE)
     x.x = x[, 3:ncol(x)]
     rownames(x.x) = x[, 2]
     k = matrix(x[, 1], ncol = 1)
-    colnames(k)[1] = "class"
+    colnames(k)[1] = "Class"
     x.x = cbind(k, x.x)
     sorted = x.x[order(x.x[, 1]), ]
     sorted.x = as.matrix(sorted[, -1], ncol = ncol(sorted) - 

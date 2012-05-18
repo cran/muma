@@ -1,10 +1,10 @@
 stocsy <-
 function(scaling, threshold=FALSE, pos.threshold, neg.threshold) {
-  pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/NormalizedTable.csv", sep="")
+  pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
   x <- read.csv(pwd.n, sep=",", header=TRUE)
   x.x <- x[,2:ncol(x)]
   rownames(x.x) <- x[,1]
-  x.t <- t(x.x)
+  x.t <- x.x
   mycor = cor(x.t, method=c("pearson"))
   library(gplots)
   col = colorpanel(50, "blue", "white", "red")

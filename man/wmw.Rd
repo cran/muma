@@ -8,49 +8,35 @@ Wilcoxon-Mann Whitney U test
 This function is implemented in the unique function for univariate statistical analysis 'univariate'. This function performs Wilcoxon-mann Whitney U test of each variable in the data set according to the class definition provided in the second column of the file.
 }
 \usage{
-wmw(file, norm)
+wmw(file)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{file}{
 a connection or a character string giving the name of the file containing the variables (matrix columns) to test.
 }
-  \item{norm}{
-logical, default is 'TRUE'. Performs normalization, prior to statistical tests, of each variable on total sum for each sample.
-}
 }
 \details{
 For details see ?univariate.
 }
-
 \author{
 Edoardo Gaude, Dimitrios Spiliotopoulos, Francesca Chignola, Silvia Mari, Andrea Spitaleri and Michela Ghitti
 }
-
 \examples{
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
 
 ## The function is currently defined as
-function (file, norm) 
+function (file) 
 {
-    comp = read.csv(file, sep = ",", header = TRUE)
-    comp.x = comp[, 3:ncol(comp)]
-    comp.x = cbind(comp[, 2], comp[, 1], comp.x)
-    x <- comp.x
+    pwdfile = paste(getwd(), "/Univariate/DataTable.csv", sep = "")
+    file = pwdfile
+    x <- read.csv(file, sep = ",", header = TRUE)
     x.x = x[, 3:ncol(x)]
     rownames(x.x) = x[, 2]
     k = matrix(x[, 1], ncol = 1)
-    if (norm) {
-        x.t <- t(x.x)
-        x.s <- matrix(colSums(x.t), nrow = 1)
-        uni = matrix(rep(1, nrow(x.t)), ncol = 1)
-        area.uni <- uni \%*\% x.s
-        x.areanorm <- x.t/area.uni
-        x.areanorm = t(x.areanorm)
-        x.n = cbind(k, x.areanorm)
-    }
-    else {
-        x.n = cbind(k, x.x)
-    }
+    x.n = cbind(k, x.x)
     sorted = x.n[order(x.n[, 1]), ]
     g = c()
     for (i in 1:nrow(sorted)) {

@@ -20,7 +20,7 @@ function(pcx,pcy,scaling) {
     m = sqrt(varY)
     M95 = M*3.03315
     m95 = m*3.03315
-    Fx = sqrt((M95^2)-(m95^2))
+    Fx = sqrt(abs((M95^2)-(m95^2)))
     Fy = Fx*tan(theta)
     F1 = c(-Fx, -Fy)
     F2 = c(Fx, Fy)
@@ -28,7 +28,7 @@ function(pcx,pcy,scaling) {
     F1.m = one%*%F1
     F2.m = one%*%F2
     library(pdist)
-    Punti = cbind(Score.x[,pcx], Score.x[,pcy])
+    Punti = cbind(dx, dy)
     dist1 = pdist(Punti[,1:2], F1.m)
     dist2 = pdist(Punti[,1:2], F2.m)
     D = matrix(dist1[,1] + dist2[,1], ncol=1)
