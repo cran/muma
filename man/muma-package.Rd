@@ -12,8 +12,8 @@ Preprocessing of metabolomic data (normalization and scalings); Principal Compon
 \tabular{ll}{
 Package: \tab muma\cr
 Type: \tab Package\cr
-Version: \tab 1.2\cr
-Date: \tab 2012-04-13\cr
+Version: \tab 1.3\cr
+Date: \tab 2012-07-20\cr
 License: \tab GPL-2\cr
 }
 Every analysis should start with the function 'explore.data' in order to create the proper files for subsequent analysis. However, it is possible to start the analysis also with the function 'univariate', but, in this case, only univariate analysis can be performed.

@@ -326,6 +326,10 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
     Pvar <- read.csv(pwd.pvar, sep = ",", header = TRUE)
     Pvar.x <- Pvar[, 2:ncol(Pvar)]
     rownames(Pvar.x) <- Pvar[, 1]
+    barplot(Pvar.x[, 1], xlab = "Principal Components", ylab = "Proportion of Variance explained", 
+        main = "Screeplot", ylim = c(0, 100))
+    scree = paste(dirout.pca, "Screeplot", scaling, ".pdf", sep = "")
+    dev.copy2pdf(file = scree)
     tutticolors = matrix(c(1, 2, 3, 4, 5, 6, 7, 8, "rosybrown4", 
         "green4", "navy", "purple2", "orange", "pink", "chocolate2", 
         "coral3", "khaki3", "thistle", "turquoise3", "palegreen1", 
@@ -344,6 +348,7 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
         pairs = c(ncol(Score.x))
     }
     pairs(Score.x[, 1:pairs], col = col)
+    dev.new()
     pairs = paste(dirout.pca, "First_10_Components_", scaling, 
         ".pdf", sep = "")
     dev.copy2pdf(file = pairs)

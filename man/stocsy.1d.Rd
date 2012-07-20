@@ -36,12 +36,12 @@ Edoardo Gaude, Dimitrios Spiliotopoulos, Francesca Chignola, Silvia Mari, Andrea
 ## The function is currently defined as
 function (scaling, driver.peak) 
 {
-    pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/NormalizedTable.csv", 
+    pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", 
         sep = "")
     x <- read.csv(pwd.n, sep = ",", header = TRUE)
     x.x <- x[, 2:ncol(x)]
     rownames(x.x) <- x[, 1]
-    x.t <- t(x.x)
+    x.t <- x.x
     mycor = cor(x.t, method = c("pearson"))
     library(gplots)
     pal = matrix(rich.colors(41), nrow = 1)
@@ -60,11 +60,11 @@ function (scaling, driver.peak)
         ylab = paste("Coefficient of correlation with ", rownames(x.x)[driver.peak], 
             sep = ""), main = paste("STOCSY 1D (", rownames(x.x)[driver.peak], 
             ")", sep = ""), ylim = c(-1, 1))
-    text(mycor[, driver.peak], labels = rownames(x.x), cex = 0.5, 
+    text(mycor[, driver.peak], labels = colnames(x.x), cex = 0.5, 
         col = col)
     dirout = paste(getwd(), "/STOCSY_1D/", sep = "")
     dir.create(dirout)
-    out = paste(dirout, "stocsy_1d_", rownames(x.x)[driver.peak], 
+    out = paste(dirout, "stocsy_1d_", colnames(x.x)[driver.peak], 
         ".pdf", sep = "")
     dev.copy2pdf(file = out)
   }

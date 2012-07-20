@@ -1,5 +1,5 @@
 univariate <-
-function(file, imputation=FALSE, imput, normalize=TRUE, multi.test=TRUE, plot.volcano=FALSE) {
+function(file, imputation=FALSE, imput, normalize=TRUE, multi.test=TRUE, plot.volcano=FALSE, save.boxplot=TRUE) {
 dirout.uni = paste(getwd(), "/Univariate/", sep="")
 dir.create(dirout.uni)
      comp = read.csv(file, sep=",", header=TRUE)
@@ -69,7 +69,6 @@ write.csv(y, pwdfile, row.names=FALSE)
 if (normalize) {
   x <- read.csv(pwdfile, sep=",", header=TRUE)
   x.x <- x[,3:ncol(x)]
-  rownames(x.x) <- x[,2]
   x.t <- t(x.x)
   x.s <- matrix(colSums(x.t), nrow=1)
   uni = matrix(rep(1,nrow(x.t)), ncol=1)
@@ -77,7 +76,12 @@ if (normalize) {
   x.areanorm<-x.t/area.uni
   x.areanorm = t(x.areanorm)
   x.n = cbind(x[,1], x.areanorm)
-  write.csv(x.n, pwdfile, row.names=FALSE)
+  rownames(x.n)=x[,2]
+  write.csv(x.n, pwdfile)
+  comp <- read.csv(pwdfile, sep=",", header=TRUE)
+  comp.x = comp[,3:ncol(comp)]
+  comp.x = cbind(comp[,2], comp[,1], comp.x)
+  write.csv(comp.x, pwdfile, row.names=FALSE)
 }
 
 shapiro(file)
@@ -86,5 +90,5 @@ wmw(file)
 if (multi.test) {pvalues(file, mtc=TRUE)} else {pvalues(file, mtc=FALSE)}
 col.pvalues(file)
 if (plot.volcano) {volcano(file, plot.vol=TRUE)} else {volcano(file, plot.vol=FALSE)}
-box.plot(file) 
+if (save.boxplot) {box.plot(file)}
 }

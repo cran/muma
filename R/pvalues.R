@@ -48,6 +48,7 @@ for (i in 1:NoF) {
     }
     if (mtc) {
     pval.corr = matrix(p.adjust(pvalues, method=c("BH"), n = nrow(pvalues)), ncol=1)
+    rownames(pval.corr)=colnames(x.x)
     pvalfin = paste("Pvalues_", i,"vs", j, ".out", sep="")
     assign(pvalfin, pval.corr)
     write.csv(pval.corr, paste(dirout.pv, pvalfin, sep=""))
@@ -61,6 +62,7 @@ for (i in 1:NoF) {
     assign(signnam, sign)
     write.csv(sign, paste(dirout.sign, signnam, sep=""), row.names=FALSE)
     } else {
+    rownames(pvalues)=colnames(x.x)
     pvalfin = paste("Pvalues_", i,"vs", j, ".out", sep="")
     assign(pvalfin, pvalues)
     write.csv(pvalues, paste(dirout.pv, pvalfin, sep=""))

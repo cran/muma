@@ -1,6 +1,6 @@
 oplsda <-
 function(scaling) {
-  	pwd.x = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable", scaling, ".csv", sep="")
+  	pwd.x = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", sep="")
 	x = read.csv(pwd.x, header=TRUE)
  	x.x = x[,2:ncol(x)]
  	rownames(x.x) = x[,1]
@@ -96,12 +96,16 @@ axis(1, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
 axis(2, at=lim*2, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)
 library(car)
 dataEllipse(T[,nf], Tortho[,1], levels = c(0.95), add=TRUE, col = "black", lwd = 0.4, plot.points=FALSE, center.cex=0.2)
-dirout = paste(getwd(), "/OPLS-DA/", sep="")
+dirout = paste(getwd(), "/OPLS-DA", scaling, "/", sep="")
 dir.create(dirout)
 pwdxdef = paste(dirout, "X_deflated.csv", sep="")
 write.csv(X, pwdxdef)
 scor = paste(dirout, "ScorePlot_OPLS-DA_", scaling, ".pdf", sep="")
 dev.copy2pdf(file=scor)
+pwdT = paste(dirout, "TScore_Matrix.csv", sep="")
+write.csv(T, pwdT)
+pwdTortho = paste(dirout, "TorthoScore_Matrix.csv", sep="")
+write.csv(T, pwdTortho)
 #S-plot
 s = as.matrix(sorted[,-1], ncol=ncol(sorted)-1)
 p1 = c()
@@ -115,6 +119,10 @@ for (i in 1:nrow(p1)) {
 	corr1 = p1[i,]/den
 	pcorr1 = matrix(c(pcorr1, corr1), ncol=1)
 }
+pwdp1 = paste(dirout, "p1_Matrix.csv", sep="")
+write.csv(p1, pwdp1)
+pwdpcorr1 = paste(dirout, "pcorr1_Matrix.csv", sep="")
+write.csv(pcorr1, pwdpcorr1)
 dev.new()
 plot(p1, pcorr1, xlab="p[1]", ylab ="p(corr)[1]", main = paste("S-plot (OPLS-DA) ", scaling, sep=""))
 text(p1, pcorr1, labels=colnames(s), cex=0.5, pos=1)

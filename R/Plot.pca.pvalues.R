@@ -16,7 +16,7 @@ function(pcx, pcy, scaling) {
  colcool = "Colors_Pvalues"
  pwdcol = paste(getwd(), "/Univariate/Pvalues/", colcool, sep="")
  col.pv = read.csv(pwdcol, header=TRUE)
- col.pv = col.pv[,-1]
+ col.pv = matrix(col.pv[,-1], ncol=1)
  dev.new()
  plot(Loading.x[,pcx], Loading.x[,pcy], col=col.pv, xlab = load.xlab, ylab = load.ylab, xlim = c(Min.pc1,Max.pc1), ylim = c(Min.pc2, Max.pc2), main = "PCA - Loading Plot (Significance-colored variables)", sub = "Variables in red showed Pvalue < 0.05")
  axis(1, at=Mpc1, pos=c(0,0), labels=FALSE, col="grey", lwd=0.7)

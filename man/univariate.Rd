@@ -8,7 +8,7 @@ Univariate statistical analysis
 Function to perform univariate statistical analysis with parametric and non parametric testings. A decisional tree algorithm is implemented, assessing whether a variable is normally distributed or not (Shapiro Wilk's test) and performing Welch's T test or Wilcoxon-Mann Whitney U test, depending on normality. 
 }
 \usage{
-univariate(file, imputation = FALSE, imput, normalize = TRUE, multi.test = TRUE, plot.volcano = FALSE)
+univariate(file, imputation = FALSE, imput, normalize = TRUE, multi.test = TRUE, plot.volcano = FALSE, save.boxplot=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,6 +30,10 @@ logical, default is 'TRUE'. Performs correction for multiple testing with Benjam
   \item{plot.volcano}{
 logical, default is 'FALSE', visualizes volcano plots of each pairwise comparison between groups.
 }
+\item{save.boxplot}{
+logical, default is 'TRUE', plots and saves boxplot.
+}
+
 }
 \details{
 The 'file' provided has to be a matrix in .csv form, formatted with the first column indicating the name of the samples and the second column indicating the class of belonging of each samples (e.g. treatment groups, healthy/diseased, ...). The header of the matrix must contain the name of each variable in the dataset.
@@ -58,7 +62,7 @@ Edoardo Gaude, Dimitrios Spiliotopoulos, Francesca Chignola, Silvia Mari, Andrea
 
 ## The function is currently defined as
 function (file, imputation = FALSE, imput, normalize = TRUE, 
-    multi.test = TRUE, plot.volcano = FALSE) 
+    multi.test = TRUE, plot.volcano = FALSE, save.boxplot = TRUE) 
 {
     dirout.uni = paste(getwd(), "/Univariate/", sep = "")
     dir.create(dirout.uni)
@@ -156,7 +160,6 @@ function (file, imputation = FALSE, imput, normalize = TRUE,
     if (normalize) {
         x <- read.csv(pwdfile, sep = ",", header = TRUE)
         x.x <- x[, 3:ncol(x)]
-        rownames(x.x) <- x[, 2]
         x.t <- t(x.x)
         x.s <- matrix(colSums(x.t), nrow = 1)
         uni = matrix(rep(1, nrow(x.t)), ncol = 1)
@@ -164,7 +167,12 @@ function (file, imputation = FALSE, imput, normalize = TRUE,
         x.areanorm <- x.t/area.uni
         x.areanorm = t(x.areanorm)
         x.n = cbind(x[, 1], x.areanorm)
-        write.csv(x.n, pwdfile, row.names = FALSE)
+        rownames(x.n) = x[, 2]
+        write.csv(x.n, pwdfile)
+        comp <- read.csv(pwdfile, sep = ",", header = TRUE)
+        comp.x = comp[, 3:ncol(comp)]
+        comp.x = cbind(comp[, 2], comp[, 1], comp.x)
+        write.csv(comp.x, pwdfile, row.names = FALSE)
     }
     shapiro(file)
     welch(file)
@@ -182,7 +190,9 @@ function (file, imputation = FALSE, imput, normalize = TRUE,
     else {
         volcano(file, plot.vol = FALSE)
     }
-    box.plot(file)
+    if (save.boxplot) {
+        box.plot(file)
+    }
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
