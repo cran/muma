@@ -14,14 +14,14 @@ function(file){
   else {g=matrix(c(g,sorted[i,1]), ncol=1)}
  }
  NoF=nrow(g)
- dirout.w = paste(getwd(), "/Univariate/Welch_Tests", sep="")
+ dirout.w = paste(getwd(), "/Univariate/WelchTest", sep="")
  dir.create(dirout.w)
  # Perform the Welch test for the effective combinations
  for (i in 1:NoF) {
   for (j in 1:NoF) { 
    if (i < j) {
-    ni=paste("r.",i,".out",sep="")
-    nj=paste("r.",j,".out",sep="")
+    ni=paste("r.",i,".csv",sep="")
+    nj=paste("r.",j,".csv",sep="")
     pwdi = paste(getwd(), "/Univariate/Groups/", ni, sep="")
     pwdj = paste(getwd(), "/Univariate/Groups/", nj, sep="")
     I=read.csv(pwdi, header=TRUE)
@@ -33,7 +33,7 @@ function(file){
     for (q in 1:fin) {
     we[q,] <- t.test(I[,q],J[,q],var.equal=F,conf.level=.95,alternative="two.sided")$p.value
     }
-    welch.ij=paste("WelchTest_",i,"vs",j, ".out", sep="")
+    welch.ij=paste("WelchTest_",i,"vs",j, ".csv", sep="")
     assign(welch.ij,we)
     write.csv(we, paste(dirout.w, welch.ij, sep="/"))
    }

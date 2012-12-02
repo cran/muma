@@ -58,19 +58,22 @@ function (file)
         nam = paste("r", i, sep = ".")
         n = matrix(fin[-1, ], ncol = ncol(sorted))
         n.x = matrix(n[, -1], ncol = ncol(sorted) - 1)
+        lastcol = ncol(sorted)
+        n.x = n.x[, -lastcol]
         colnames(n.x) = colnames(x.x)
         name = as.matrix(assign(nam, n.x))
         shapname = paste("shapiro", i, sep = ".")
-        shapiro = matrix(rep(NA, ncol(n)))
+        shapiro = matrix(rep(NA, ncol(n.x)))
         for (q in 1:ncol(name)) {
             notAlist = c()
             notAlist = matrix(unlist(name[, q]))
             shapiro[q, ] = shapiro.test(notAlist)$p.value
             assign(shapname, shapiro)
         }
-        outputfile = paste("r.", i, ".out", sep = "")
+        outputfile = paste("r.", i, ".csv", sep = "")
         write.csv(name, paste(dirout.r, outputfile, sep = "/"))
-        outshapiro = paste("ShapiroTest.", i, ".out", sep = "")
+        outshapiro = paste("ShapiroTest.", i, ".csv", sep = "")
+        shapiro[is.na(shapiro)] = 1
         write.csv(shapiro, paste(dirout.s, outshapiro, sep = "/"))
     }
   }

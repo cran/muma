@@ -33,6 +33,7 @@ Edoardo Gaude, Dimitrios Spiliotopoulos, Francesca Chignola, Silvia Mari, Andrea
 
 \examples{
 
+
 ## The function is currently defined as
 function (scaling, driver.peak) 
 {

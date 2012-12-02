@@ -1,6 +1,6 @@
 Plot.pca.pvalues <-
 function(pcx, pcy, scaling) {
- loadi = paste(getwd(), "/PCA_Data_", scaling, "/PCA_LoadingsMatrix.out", sep="")
+ loadi = paste(getwd(), "/PCA_Data_", scaling, "/PCA_LoadingsMatrix.csv", sep="")
  Loading <- read.csv(loadi, sep=",", header=TRUE)
  Loading.x <- Loading[,2:ncol(Loading)]
  rownames(Loading.x) <- Loading[,1]

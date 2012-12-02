@@ -32,10 +32,11 @@ Edoardo Gaude, Dimitrios Spiliotopoulos, Francesca Chignola, Silvia Mari, Andrea
 
 \examples{
 
+
 ## The function is currently defined as
 function (pcx, pcy, scaling) 
 {
-    score = paste(getwd(), "/PCA_Data_", scaling, "/PCA_ScoreMatrix.out", 
+    score = paste(getwd(), "/PCA_Data_", scaling, "/PCA_ScoreMatrix.csv", 
         sep = "")
     ppppp = paste(getwd(), "/PCA_Data_", scaling, "/PCA_P", sep = "")
     Score <- read.csv(score, sep = ",", header = TRUE)

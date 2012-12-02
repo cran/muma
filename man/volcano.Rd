@@ -58,14 +58,14 @@ function (file, plot.vol)
     for (i in 1:NoF) {
         for (j in 1:NoF) {
             if (i < j) {
-                ni = paste("r.", i, ".out", sep = "")
-                nj = paste("r.", j, ".out", sep = "")
+                ni = paste("r.", i, ".csv", sep = "")
+                nj = paste("r.", j, ".csv", sep = "")
                 pwdi = paste(getwd(), "/Univariate/Groups/", 
                   ni, sep = "")
                 pwdj = paste(getwd(), "/Univariate/Groups/", 
                   nj, sep = "")
                 pv = paste(getwd(), "/Univariate/Pvalues/Pvalues_", 
-                  i, "vs", j, ".out", sep = "")
+                  i, "vs", j, ".csv", sep = "")
                 I = read.csv(pwdi, header = TRUE)
                 J = read.csv(pwdj, header = TRUE)
                 I = I[, -1]
@@ -86,9 +86,9 @@ function (file, plot.vol)
                 }
                 FC = matrix(MeanI/MeanJ, nrow = ncol(I))
                 rownames(FC) = colnames(I)
-                fc.outfile = paste("Fold_Change_", i, "vs", j, 
-                  ".out", sep = "")
-                write.csv(FC, paste(dirout.fc, fc.outfile, sep = ""))
+                fc.csvfile = paste("Fold_Change_", i, "vs", j, 
+                  ".csv", sep = "")
+                write.csv(FC, paste(dirout.fc, fc.csvfile, sep = ""))
                 PV = read.csv(pv, header = TRUE)
                 PV = matrix(PV[, -1], ncol = 1)
                 logfc = log2(FC)

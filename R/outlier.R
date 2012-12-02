@@ -1,6 +1,6 @@
 outlier <-
 function(pcx,pcy,scaling) {
-    pwd.score = paste(getwd(), "/PCA_Data_", scaling, "/PCA_ScoreMatrix.out", sep="")
+    pwd.score = paste(getwd(), "/PCA_Data_", scaling, "/PCA_ScoreMatrix.csv", sep="")
     Score <- read.csv(pwd.score, sep=",", header=TRUE)
     Score.x <- Score[,2:ncol(Score)]
     rownames(Score.x) <- Score[,1]
@@ -34,7 +34,7 @@ function(pcx,pcy,scaling) {
     D = matrix(dist1[,1] + dist2[,1], ncol=1)
     v = M95*2
     outliers = c()
-    O = paste(getwd(), "/PCA_Data_", scaling, "/Outliers_PC", pcx, "vs", pcy,".out", sep="")
+    O = paste(getwd(), "/PCA_Data_", scaling, "/Outliers_PC", pcx, "vs", pcy,".csv", sep="")
     write.csv(outliers, O)
      cat("The following observations are calculated as outliers \n",file=O)
       for (i in 1:nrow(D)) {

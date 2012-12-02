@@ -45,13 +45,13 @@ function (file)
         }
     }
     NoF = nrow(g)
-    dirout.w = paste(getwd(), "/Univariate/Welch_Tests", sep = "")
+    dirout.w = paste(getwd(), "/Univariate/WelchTest", sep = "")
     dir.create(dirout.w)
     for (i in 1:NoF) {
         for (j in 1:NoF) {
             if (i < j) {
-                ni = paste("r.", i, ".out", sep = "")
-                nj = paste("r.", j, ".out", sep = "")
+                ni = paste("r.", i, ".csv", sep = "")
+                nj = paste("r.", j, ".csv", sep = "")
                 pwdi = paste(getwd(), "/Univariate/Groups/", 
                   ni, sep = "")
                 pwdj = paste(getwd(), "/Univariate/Groups/", 
@@ -66,7 +66,7 @@ function (file)
                   we[q, ] <- t.test(I[, q], J[, q], var.equal = F, 
                     conf.level = 0.95, alternative = "two.sided")$p.value
                 }
-                welch.ij = paste("WelchTest_", i, "vs", j, ".out", 
+                welch.ij = paste("WelchTest_", i, "vs", j, ".csv", 
                   sep = "")
                 assign(welch.ij, we)
                 write.csv(we, paste(dirout.w, welch.ij, sep = "/"))

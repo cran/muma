@@ -35,7 +35,7 @@ Edoardo Gaude, Dimitrios Spiliotopoulos, Francesca Chignola, Silvia Mari, Andrea
 ## The function is currently defined as
 function (pcx, pcy, scaling) 
 {
-    loadi = paste(getwd(), "/PCA_Data_", scaling, "/PCA_LoadingsMatrix.out", 
+    loadi = paste(getwd(), "/PCA_Data_", scaling, "/PCA_LoadingsMatrix.csv", 
         sep = "")
     Loading <- read.csv(loadi, sep = ",", header = TRUE)
     Loading.x <- Loading[, 2:ncol(Loading)]

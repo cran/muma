@@ -138,47 +138,21 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
         write.csv(y, pwdi)
         x.x = y
     }
-    z <- matrix(NA, nrow(x.x), ncol(x.x))
-    colnames(z) <- colnames(x.x)
-    rownames(z) <- rownames(x.x)
-    negative = c()
-    N = paste(getwd(), "/Preprocessing_Data_", scaling, "/NegativeValues.out", 
-        sep = "")
-    write.csv(negative, N)
-    cat("The following variables are negative, so they are modified to zero \n", 
-        file = N, append = TRUE)
-    for (j in 1:ncol(x.x)) {
-        for (i in 1:nrow(x.x)) {
-            if (x.x[i, j] < 0) {
-                z[i, j] <- 0
-                cat(rownames(x.x)[i], ",", colnames(x.x)[j], 
-                  " \n", file = N, append = TRUE)
-            }
-            else {
-                z[i, j] <- x.x[i, j]
+    for (i in 1:nrow(x.x)) {
+        for (j in 1:ncol(x.x)) {
+            if (x.x[i, j] <= 0) {
+                x.x[i, j] = runif(1, 0, 1e-10)
             }
         }
     }
-    z.x = matrix(rep(NA, nrow(z)), ncol = 1)
-    for (l in 1:ncol(z)) {
-        if (sum(z[, l]) == 0) {
-            z.x = z.x
-        }
-        else {
-            z.x = cbind(z.x, z[, l])
-            colnames(z.x)[ncol(z.x)] = colnames(z)[l]
-        }
-    }
-    z.x = matrix(z.x[, -1], ncol = ncol(z.x) - 1)
-    rownames(z.x) = rownames(z)
-    colnames(z.x) = colnames(z)[apply(z, 2, function(c) sum(c) > 
-        0)]
-    write.csv(z.x, paste(dirout, "CorrectedTable.csv", sep = ""))
+    x.x = cbind(comp[, 2], x.x)
+    write.csv(x.x, paste(dirout, "CorrectedTable.csv", sep = ""))
     pwd.c = paste(getwd(), "/Preprocessing_Data_", scaling, "/CorrectedTable.csv", 
         sep = "")
     x <- read.csv(pwd.c, sep = ",", header = TRUE)
-    x.x <- x[, 2:ncol(x)]
+    x.x <- x[, 3:ncol(x)]
     rownames(x.x) <- x[, 1]
+    k = matrix(x[, 2], ncol = 1)
     if (normalize) {
         x.t <- t(x.x)
         x.s <- matrix(colSums(x.t), nrow = 1)
@@ -307,16 +281,16 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
     dirout.pca = paste(getwd(), "/PCA_Data_", scaling, "/", sep = "")
     dir.create(dirout.pca)
     write.csv(p.f, paste(dirout.pca, "PCA_P", sep = ""))
-    write.csv(pc.all$x, paste(dirout.pca, "PCA_ScoreMatrix.out", 
+    write.csv(pc.all$x, paste(dirout.pca, "PCA_ScoreMatrix.csv", 
         sep = ""))
-    write.csv(pc.all$rotation, paste(dirout.pca, "PCA_LoadingsMatrix.out", 
+    write.csv(pc.all$rotation, paste(dirout.pca, "PCA_LoadingsMatrix.csv", 
         sep = ""))
-    pwd.score = paste(getwd(), "/PCA_Data_", scaling, "/", "PCA_ScoreMatrix.out", 
+    pwd.score = paste(getwd(), "/PCA_Data_", scaling, "/", "PCA_ScoreMatrix.csv", 
         sep = "")
     Score <- read.csv(pwd.score, sep = ",", header = TRUE)
     Score.x <- Score[, 2:ncol(Score)]
     rownames(Score.x) <- Score[, 1]
-    pwd.load = paste(getwd(), "/PCA_Data_", scaling, "/", "PCA_LoadingsMatrix.out", 
+    pwd.load = paste(getwd(), "/PCA_Data_", scaling, "/", "PCA_LoadingsMatrix.csv", 
         sep = "")
     Loading <- read.csv(pwd.load, sep = ",", header = TRUE)
     Loading.x <- Loading[, 2:ncol(Loading)]
@@ -335,7 +309,6 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
         "coral3", "khaki3", "thistle", "turquoise3", "palegreen1", 
         "moccasin", "olivedrab3", "azure4", "gold3", "deeppink"), 
         ncol = 1)
-    k = matrix(comp.x[, 1], ncol = 1)
     col = c()
     for (i in 1:nrow(k)) {
         col = c(col, tutticolors[k[i, ], ])
@@ -382,7 +355,7 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
         n = matrix(fin[-1, ], ncol = ncol(sorted))
         n.x = matrix(n[, -1], ncol = ncol(sorted) - 1)
         name = as.matrix(assign(nam, n.x))
-        outputfileg = paste("r.", i, ".out", sep = "")
+        outputfileg = paste("r.", i, ".csv", sep = "")
         write.csv(name, paste(dirout.g, outputfileg, sep = "/"), 
             row.names = FALSE)
     }
@@ -391,8 +364,8 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
     for (i in 1:NoF) {
         for (j in 1:NoF) {
             if (i < j) {
-                ni = paste("r.", i, ".out", sep = "")
-                nj = paste("r.", j, ".out", sep = "")
+                ni = paste("r.", i, ".csv", sep = "")
+                nj = paste("r.", j, ".csv", sep = "")
                 pwdi = paste(getwd(), "/Groups/", ni, sep = "")
                 pwdj = paste(getwd(), "/Groups/", nj, sep = "")
                 I = read.csv(pwdi, header = TRUE)
@@ -408,7 +381,9 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
                     if (k < l) {
                       Ikl = cbind(I[, k], I[, l])
                       Jkl = cbind(J[, k], J[, l])
-                      t2 = T2.test(Ikl, Jkl)$statistic
+                      t1 = matrix(T2.test(Ikl, Jkl)$statistic, 
+                        ncol = 2)
+                      t2 = c(t1[, 1])
                       T2 = matrix(c(T2, t2), ncol = 1)
                       rownam = paste("PC", k, "vsPC", l, sep = "")
                       nam = matrix(c(nam, rownam), ncol = 1)
@@ -446,7 +421,7 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
         2)))
     all.F = matrix(all.F, ncol = ncomparison)
     rownames(all.F) = nam
-    allFpwd = paste(getwd(), "/PCA_Data_", scaling, "/PCs_Fstatistic.out", 
+    allFpwd = paste(getwd(), "/PCA_Data_", scaling, "/PCs_Fstatistic.csv", 
         sep = "")
     write.csv(all.F, allFpwd, row.names = FALSE)
     sum = matrix(rowSums(all.F), ncol = 1)
@@ -459,7 +434,7 @@ function (file, scaling, scal = TRUE, normalize = TRUE, imputation = FALSE,
     colnames(ord.sum)[2] = "Sum_p_values(F_statistics)"
     colnames(ord.sum)[1] = "Pair_of_PCs"
     rownames(ord.sum) = 1:nrow(ord.sum)
-    rankFpwd = paste(getwd(), "/PCA_Data_", scaling, "/PCs_ranked_Fpvalue.out", 
+    rankFpwd = paste(getwd(), "/PCA_Data_", scaling, "/PCs_ranked_Fpvalue.csv", 
         sep = "")
     write.csv(ord.sum, rankFpwd, row.names = FALSE)
     print("Pairs of Principal Components giving highest statistical cluster separation are:")

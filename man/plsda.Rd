@@ -70,10 +70,10 @@ function (scaling)
     rownames(P$loadings) = colnames(sorted.x)
     dirout = paste(getwd(), "/PLS-DA_", scaling, "/", sep = "")
     dir.create(dirout)
-    out.score = paste(dirout, "PLSDA_Scores_", scaling, ".out", 
+    out.score = paste(dirout, "PLSDA_Scores_", scaling, ".csv", 
         sep = "")
     write.csv(P$scores, out.score)
-    out.load = paste(dirout, "PLSDA_Loadings_", scaling, ".out", 
+    out.load = paste(dirout, "PLSDA_Loadings_", scaling, ".csv", 
         sep = "")
     write.csv(P$loadings, out.load)
     k = matrix(sorted[, 1], ncol = 1)
@@ -124,12 +124,12 @@ function (scaling)
         dev.copy2pdf(file = pairs)
     }
     p.v = matrix(P$Xvar, ncol = 1)
-    p.v.out = paste(dirout, "PLSDA_P_", scaling, ".out", sep = "")
-    write.csv(p.v, file = p.v.out)
+    p.v.csv = paste(dirout, "PLSDA_P_", scaling, ".csv", sep = "")
+    write.csv(p.v, file = p.v.csv)
     p.vtot = matrix(P$Xtotvar, ncol = 1)
-    p.vtot.out = paste(dirout, "PLSDA_Ptot_", scaling, ".out", 
+    p.vtot.csv = paste(dirout, "PLSDA_Ptot_", scaling, ".csv", 
         sep = "")
-    write.csv(p.vtot, file = p.vtot.out, row.names = FALSE)
+    write.csv(p.vtot, file = p.vtot.csv, row.names = FALSE)
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

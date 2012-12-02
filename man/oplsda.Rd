@@ -185,9 +185,9 @@ function (scaling)
     dirout.pca = paste(dirout, "PCA_OPLS/", sep = "")
     dir.create(dirout.pca)
     write.csv(p.f, paste(dirout.pca, "PCA_P_OPLS", sep = ""))
-    write.csv(pc.all$x, paste(dirout.pca, "PCA_OPLS_ScoreMatrix.out", 
+    write.csv(pc.all$x, paste(dirout.pca, "PCA_OPLS_ScoreMatrix.csv", 
         sep = ""))
-    write.csv(pc.all$rotation, paste(dirout.pca, "PCA_OPLS_LoadingsMatrix.out", 
+    write.csv(pc.all$rotation, paste(dirout.pca, "PCA_OPLS_LoadingsMatrix.csv", 
         sep = ""))
     cum = p.f[1, 1] + p.f[2, 1]
     lim = c()

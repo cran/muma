@@ -26,10 +26,12 @@ Edoardo Gaude, Dimitrios Spiliotopoulos, Francesca Chignola, Silvia Mari, Andrea
 ## The function is currently defined as
 function (scaling) 
 {
-    pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/NormalizedTable.csv", 
+    pwd.n = paste(getwd(), "/Preprocessing_Data_", scaling, "/ProcessedTable.csv", 
         sep = "")
     x <- read.csv(pwd.n, sep = ",", header = TRUE)
-    print(x[, 1])
+    x.x <- x[, 2:ncol(x)]
+    rownames(x.x) <- x[, 1]
+    print(colnames(x.x))
   }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -51,8 +51,8 @@ function (file)
     for (i in 1:NoF) {
         for (j in 1:NoF) {
             if (i < j) {
-                ni = paste("r.", i, ".out", sep = "")
-                nj = paste("r.", j, ".out", sep = "")
+                ni = paste("r.", i, ".csv", sep = "")
+                nj = paste("r.", j, ".csv", sep = "")
                 pwdi = paste(getwd(), "/Univariate/Groups/", 
                   ni, sep = "")
                 pwdj = paste(getwd(), "/Univariate/Groups/", 
@@ -69,7 +69,7 @@ function (file)
                     conf.level = 0.95, alternative = "two.sided")$p.value
                 }
                 wmw.ij.pv = paste("WMWTest_pvalues_", i, "vs", 
-                  j, ".out", sep = "")
+                  j, ".csv", sep = "")
                 assign(wmw.ij.pv, wilx.pv)
                 write.csv(wilx.pv, paste(dirout.wm, wmw.ij.pv, 
                   sep = ""))

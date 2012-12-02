@@ -68,6 +68,13 @@ function (file, imputation = FALSE, imput, normalize = TRUE,
     dir.create(dirout.uni)
     comp = read.csv(file, sep = ",", header = TRUE)
     comp.x = comp[, 3:ncol(comp)]
+    for (i in 1:nrow(comp.x)) {
+        for (j in 1:ncol(comp.x)) {
+            if (comp.x[i, j] <= 0) {
+                comp.x[i, j] = runif(1, 0, 1e-10)
+            }
+        }
+    }
     comp.x = cbind(comp[, 2], comp[, 1], comp.x)
     pwdfile = paste(getwd(), "/Univariate/DataTable.csv", sep = "")
     write.csv(comp.x, pwdfile, row.names = FALSE)

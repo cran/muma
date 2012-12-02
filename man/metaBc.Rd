@@ -11,8 +11,8 @@ Data from metabolomics analysis of B cells harvested in different conditions and
 \format{
   A data frame with 25 observations on the following 100 variables.
   \describe{
-    \item{\code{Label}}{a factor with levels \code{-LPS1} \code{-LPS2} \code{-LPS3} \code{-LPS4} \code{-LPS5} \code{DAY1.1} \code{DAY1.2} \code{DAY1.3} \code{DAY1.4} \code{DAY1.5} \code{DAY2.1} \code{DAY2.2} \code{DAY2.3} \code{DAY2.4} \code{DAY2.5} \code{DAY3.1} \code{DAY3.2} \code{DAY3.3} \code{DAY3.4} \code{DAY3.5} \code{DAY4.1} \code{DAY4.2} \code{DAY4.3} \code{DAY4.4} \code{DAY4.5}}
-    \item{\code{class}}{a numeric vector}
+    \item{\code{Samples}}{a factor with levels \code{-LPS1} \code{-LPS2} \code{-LPS3} \code{-LPS4} \code{-LPS5} \code{DAY1.1} \code{DAY1.2} \code{DAY1.3} \code{DAY1.4} \code{DAY1.5} \code{DAY2.1} \code{DAY2.2} \code{DAY2.3} \code{DAY2.4} \code{DAY2.5} \code{DAY3.1} \code{DAY3.2} \code{DAY3.3} \code{DAY3.4} \code{DAY3.5} \code{DAY4.1} \code{DAY4.2} \code{DAY4.3} \code{DAY4.4} \code{DAY4.5}}
+    \item{\code{Class}}{a numeric vector}
     \item{\code{X0.89}}{a numeric vector}
     \item{\code{X0.93}}{a numeric vector}
     \item{\code{X0.95}}{a numeric vector}

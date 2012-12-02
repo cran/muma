@@ -1,17 +1,17 @@
 Plot.plsda <-
 function (pcx, pcy, scaling) {
-pwd.score = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_Scores_", scaling, ".out", sep="")
+pwd.score = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_Scores_", scaling, ".csv", sep="")
 score = read.csv(pwd.score, header=TRUE)
 score.x = score[,-1]
 rownames(score.x) = score[,1]
-pwd.load = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_Loadings_", scaling, ".out", sep="")
+pwd.load = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_Loadings_", scaling, ".csv", sep="")
 loading = read.csv(pwd.load, header=TRUE)
 loading.x = loading[,-1]
 rownames(loading.x) = loading[,1]
-pwd.p = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_P_", scaling, ".out", sep="")
+pwd.p = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_P_", scaling, ".csv", sep="")
 p = read.csv(pwd.p, header=TRUE)
 p.x = matrix(p[,-1], ncol=1)
-pwd.ptot = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_Ptot_", scaling, ".out", sep="")
+pwd.ptot = paste(getwd(), "/PLS-DA_", scaling, "/PLSDA_Ptot_", scaling, ".csv", sep="")
 p = read.csv(pwd.ptot, header=TRUE)
 pvar.a = p.x[pcx,]/p
 pvar.b = p.x[pcy,]/p

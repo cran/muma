@@ -1,6 +1,6 @@
 Plot.pca.score <-
 function(pcx,pcy,scaling) {
- score = paste(getwd(), "/PCA_Data_", scaling, "/PCA_ScoreMatrix.out", sep="")
+ score = paste(getwd(), "/PCA_Data_", scaling, "/PCA_ScoreMatrix.csv", sep="")
  ppppp = paste(getwd(), "/PCA_Data_", scaling, "/PCA_P", sep="")
  Score <- read.csv(score, sep=",", header=TRUE)
  Score.x <- Score[,2:ncol(Score)]

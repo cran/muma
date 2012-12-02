@@ -54,7 +54,7 @@ function (file)
     for (i in 1:NoF) {
         for (j in 1:NoF) {
             if (i < j) {
-                ni = paste("Pvalues_", i, "vs", j, ".out", sep = "")
+                ni = paste("Pvalues_", i, "vs", j, ".csv", sep = "")
                 pwdi = paste(getwd(), "/Univariate/Pvalues/", 
                   ni, sep = "")
                 I = read.csv(pwdi, header = TRUE)
